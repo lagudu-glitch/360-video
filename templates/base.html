@@ -1,0 +1,32 @@
+<!-- Copyright 2022 Vishnu Lagudu - License: MIT License -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+
+	<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename = 'main.css') }}"></link>
+
+	{% if title %}
+		<title> Results - {{ title }} </title>
+	{% else %}
+		<title> Results </title>
+	{% endif %}
+
+</head>
+<body>
+	<!-- NAVBAR HTML -->
+	<header>
+		<a class="logo" href="https://crowd.ecn.purdue.edu/43/">RESULTS</a>
+		<nav>
+			<ul class="nav_links">
+				<li><a href="https://crowd.ecn.purdue.edu/43/home">HOME</a></li>
+				<li><a href="https://crowd.ecn.purdue.edu/43/Data_Tables">DATA TABLES</a></li>
+				<li><a href="https://crowd.ecn.purdue.edu/43/Preliminary_Analysis">PRELIMINARY ANALYSIS</a></li>
+			</ul>
+		</nav>
+	</header>
+	<!-- jinja2 syntax to create page extensions -->
+	{% block content %}{% endblock %}
+</body>
+</html>

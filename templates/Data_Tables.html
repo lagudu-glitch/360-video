@@ -1,0 +1,88 @@
+<!-- Copyright 2022 Vishnu Lagudu - License: MIT License -->
+
+{% import 'macros.html' as macros %}
+{% extends "base.html" %}
+{% block content %}
+	<h1> DATA TABLES </h1>
+	<div class="menu">
+		<!-- Creates a menu from which the users can select the table they want to view -->
+		<table class="table">
+			<tr class="table_header"><th class="table_col"> SELECT A TABLE </th></tr>
+			{% for table in tables %}
+			<tr class="table_row"><td><button class="table_button" id="{{ table }}"> {{ table }} </button></td></tr>
+			{% endfor %}
+		</table>
+	</div>
+	{{ macros.data_table_automate(tables, all_headings, all_data) }}
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+
+		// Hides all the tables by table
+		$(".table_divs").hide();  
+
+		// Executes the function when the entire DOM for the page has been rendered
+		$(document).ready(function () {
+
+			// Hides the column of the given name when the check box is checked
+			$("input:checkbox").attr("checked",false).click(function () {
+				var colname = "." + $(this).attr("name");
+				$(colname).toggle();
+			});
+
+			// Gets all the table names and stores them in the variable button_ids
+			var button_ids = $('.table_button').map(function(_, x) { return x.id; }).get();
+			for (let button_id of button_ids) {
+				$("#" + button_id).click(function () {
+					$("#table_" + button_id).toggle();
+					for (let id of button_ids) {
+						if (id !== button_id) {
+							$("#table_" + id).hide();
+						}
+					}
+				});
+				var currTable = document.getElementById(button_id + "_name");
+				document.getElementById("download_" + button_id).addEventListener("click", download_csv.bind(null, currTable, button_id));
+				var input = document.getElementById("search_" + button_id);
+				document.getElementById("search_" + button_id).addEventListener("keyup", search.bind(null, input, currTable)); 
+			}
+
+			// Function that converts the DOM into a csv file. 
+			function download_csv(Table, tableName) {
+				var csv = '';
+				for (var i = 0; i < Table.rows.length; i++) {
+					var rowObj = Table.rows.item(i).cells;
+					var rowData = [];
+					for (var j = 0; j < rowObj.length; j++) {
+						rowData.push(rowObj.item(j).innerHTML);
+					}
+					csv += rowData.join(',');
+					csv += "\n";
+				}
+				var hiddenElement = document.createElement('a');
+				hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+				hiddenElement.target = '_blank';
+				hiddenElement.download = tableName + '.csv';
+				hiddenElement.click();
+			}
+
+			// Function that parses through the first column of a table and looks for the
+			// the gievn string inputted in the search bar.
+			function search(Input, Table) {
+				var filter = Input.value.toUpperCase();
+				var tr = Table.getElementsByTagName("tr");
+				for (var i = 0; i < tr.length; i++) {
+					td = tr[i].getElementsByTagName("td")[0];
+					if (td) {
+						txtValue = td.textContent || td.innerText;
+						if (txtValue.toUpperCase().indexOf(filter) > -1) {
+							tr[i].style.display = "";
+						}
+						else {
+							tr[i].style.display = "none";
+						}
+					}
+				}
+			}
+		});
+	</script>
+{% endblock %}

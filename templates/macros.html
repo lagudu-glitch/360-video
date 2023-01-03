@@ -1,0 +1,46 @@
+<!-- Copyright 2022 Vishnu Lagudu - License: MIT License -->
+
+{% macro table_name(table) %}
+	<h2> {{ table }} </h2>
+{% endmacro %}
+
+{% macro head_row(headings) %}
+	<tr class="table_header">
+		{% for head in headings %}
+		<th class="{{ head }}"> {{ head }} </th>
+		{% endfor %}
+	</tr>
+{% endmacro %}
+
+{% macro data_rows(data, headings) %}
+	{% for row in data %}
+	<tr class="table_row">
+		{% for col, head in row|zip(headings) %}
+		<td class="{{ head }}"> {{ col }} </td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
+{% endmacro %}
+
+{% macro data_table(table, headings, data) %}
+	<table class="table" id="{{ table }}_name">
+		{{ head_row(headings) }}
+		{{ data_rows(data, headings) }}
+	</table>
+{% endmacro %}
+
+{% macro data_table_automate(tables, all_headings, all_data) %}
+	{% for table in tables %}
+	<div id="table_{{ table }}" class="table_divs">
+		<h2 class="table_name"> {{ table }} </h2>
+		<input type="text" name="search" id="search_{{ table }}" placeholder="Search by ID... " />
+		<div class="views">
+			{% for heading in all_headings[table] %}	
+			<input type="checkbox" name="{{ heading }}"> {{ heading }} </input>
+			{% endfor %}
+		</div>
+		{{ data_table(table, all_headings[table], all_data[table]) }}
+		<button class="download" id="download_{{ table }}"> Download CSV </button>
+	</div>
+	{% endfor %}
+{% endmacro %}

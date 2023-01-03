@@ -1,0 +1,41 @@
+<!-- Copyright 2022 Vishnu Lagudu - License: MIT License -->
+
+{% extends "base.html" %}
+{% block content %}
+
+	<h1> ADMIN PAGE </h1>
+    <br><br>
+	<div class="add_to_db_wrapper">
+		<div class="add_to_db">
+			<form action="#" METHOD="POST" >
+				<input 
+					type="text" 
+					placeholder="Full Name" 
+					name="full_name" 
+					pattern="[A-Z]([a-z']+|\.)( [A-Z]([a-z']+|\.))+$" 
+					title="Please Enter First and Last Name" 
+					required
+				>
+				<br><br>
+				<input 
+					type="text" 
+					placeholder="Email Address" 
+					name="email_address"
+					pattern="([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,})$"
+					title="Email Format is not right!"
+					required
+				>
+				<br><br>
+				<input 
+					type="text" 
+					placeholder="Ex: 4,5,2,3,1" 
+					name="video_ids_str"
+				>
+				<br><br>
+				<input type="submit" value="SUBMIT">
+			</form>
+		</div>
+	</div>
+	<br><br>
+
+{% endblock %}
